@@ -54,11 +54,14 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 	public static Plugin plugin;
 	public static ConfigHandler config;
 
+	public static BarAPI barapi;
+
 	public static void setExpireTicks(Integer expireTicks) {
 		BossBarHealth.expireTicks = expireTicks;
 	}
 
 	public static void setEnabled(Boolean enabled) {
+		Bukkit.getServer().broadcastMessage("BossBarHealth is currently " + Boolean.toString(enabled));
 		BossBarHealth.enabled = enabled;
 	}
 
@@ -68,6 +71,8 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 
 		config = new ConfigHandler();
 		config.loadConfig();
+		
+		Bukkit.getPluginManager().registerEvents(this, this);
 
 		CommandManager handler = new CommandManager();
 		handler.newCommand("help", new HelpCommand());
@@ -83,73 +88,47 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 			if (event.getEntity() instanceof Player) {
 				if (victims.containsValue(event.getEntity().getUniqueId())) {
 					for (UUID id : victims.keySet()) {
-						if ((Bukkit.getPlayer(victims.get(id))) == event
-								.getEntity()) {
-							if (Bukkit.getPlayer(id).hasPermission("bossbar.use") && !(Bukkit.getPlayer(id).hasPermission("bossbar.deny")) && timer.get(id) > 0) {
-								BarAPI.setMessage(
-										Bukkit.getPlayer(id),
-										Bukkit.getPlayer(victims.get(id))
-												.getName(),
-										(float) ((Bukkit.getPlayer(
-												victims.get(id)).getHealth() - event
-												.getDamage())
-												/ Bukkit.getPlayer(
-														victims.get(id))
-														.getMaxHealth() * 100));
+						Player attacker = Bukkit.getPlayer(id);
+						Player victim = Bukkit.getPlayer(victims.get(id));
+						if (victim == event.getEntity()) {
+							if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")) && BarAPI.hasBar(attacker)) {
+								BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 							}
 						}
 					}
 				}
-				if (event.getEntity() instanceof Player
-						&& event.getDamager() instanceof Player) {
+				if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
 					Player attacker = (Player) event.getDamager();
 					Player victim = (Player) event.getEntity();
 					victims.put(attacker.getUniqueId(), victim.getUniqueId());
-					if (attacker.hasPermission("bossbar.use")
-							&& !(attacker.hasPermission("bossbar.deny"))) {
-						BarAPI.setMessage(
-								attacker,
-								victim.getName(),
-								(float) ((victim.getHealth() - event
-										.getDamage()) / victim.getMaxHealth() * 100));
+					if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")))
+					{
+						BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 					}
 					timer.put(attacker.getUniqueId(), expireTicks);
 					if (!timers.containsKey(attacker.getUniqueId())) {
-						timers.put(attacker.getUniqueId(), new DecreaseTimer(
-								attacker, timer));
+						timers.put(attacker.getUniqueId(), new DecreaseTimer(attacker, timer));
 					} else {
 						timers.get(attacker.getUniqueId()).cancel();
-						timers.put(attacker.getUniqueId(), new DecreaseTimer(
-								attacker, timer));
+						timers.put(attacker.getUniqueId(), new DecreaseTimer(attacker, timer));
 					}
-					timers.get(attacker.getUniqueId()).runTaskTimer(this, 1L,
-							1L);
-				} else if (event.getEntity() instanceof Player
-						&& event.getDamager() instanceof Projectile
-						&& ((Projectile) event.getDamager()).getShooter() instanceof Player) {
-					Player attacker = (Player) ((Projectile) event.getDamager())
-							.getShooter();
+					timers.get(attacker.getUniqueId()).runTaskTimer(this, 1L, 1L);
+				} else if (event.getEntity() instanceof Player && event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
+					Player attacker = (Player) ((Projectile) event.getDamager()).getShooter();
 					Player victim = (Player) event.getEntity();
 					victims.put(attacker.getUniqueId(), victim.getUniqueId());
-					if (attacker.hasPermission("bossbar.use")
-							&& !(attacker.hasPermission("bossbar.deny"))) {
-						BarAPI.setMessage(
-								attacker,
-								victim.getName(),
-								(float) (victim.getHealth()
-										/ victim.getMaxHealth() * 100));
+					if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")))
+					{
+						BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 					}
 					timer.put(attacker.getUniqueId(), expireTicks);
 					if (!timers.containsKey(attacker.getUniqueId())) {
-						timers.put(attacker.getUniqueId(), new DecreaseTimer(
-								attacker, timer));
+						timers.put(attacker.getUniqueId(), new DecreaseTimer(attacker, timer));
 					} else {
 						timers.get(attacker.getUniqueId()).cancel();
-						timers.put(attacker.getUniqueId(), new DecreaseTimer(
-								attacker, timer));
+						timers.put(attacker.getUniqueId(), new DecreaseTimer(attacker, timer));
 					}
-					timers.get(attacker.getUniqueId()).runTaskTimer(this, 1L,
-							1L);
+					timers.get(attacker.getUniqueId()).runTaskTimer(this, 1L, 1L);
 				}
 			}
 		}
@@ -161,17 +140,11 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 			if (event.getEntity() instanceof Player) {
 				if (victims.containsValue(event.getEntity().getUniqueId())) {
 					for (UUID id : victims.keySet()) {
-						if ((Bukkit.getPlayer(victims.get(id))) == event
-								.getEntity()) {
-							if (BarAPI.hasBar(Bukkit.getPlayer(id))) {
-								BarAPI.setHealth(
-										Bukkit.getPlayer(id),
-										(float) ((Bukkit.getPlayer(
-												victims.get(id)).getHealth() + event
-												.getAmount())
-												/ Bukkit.getPlayer(
-														victims.get(id))
-														.getMaxHealth() * 100));
+						Player attacker = Bukkit.getPlayer(id);
+						Player victim = Bukkit.getPlayer(victims.get(id));
+						if (victim == event.getEntity()) {
+							if (BarAPI.hasBar(attacker)) {
+								BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() + event.getAmount()) / victim.getMaxHealth() * 100));
 							}
 						}
 					}

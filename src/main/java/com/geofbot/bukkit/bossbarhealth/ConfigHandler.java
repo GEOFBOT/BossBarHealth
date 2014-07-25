@@ -2,6 +2,7 @@ package com.geofbot.bukkit.bossbarhealth;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigHandler {
@@ -12,6 +13,8 @@ public class ConfigHandler {
 			BossBarHealth.plugin.saveDefaultConfig();
 			BossBarHealth.plugin.saveConfig();
 		}
+		Bukkit.getServer().broadcastMessage(Integer.toString(conf.getInt("expireticks")));
+		Bukkit.getServer().broadcastMessage(Boolean.toString(conf.getBoolean("enabled")));
 		BossBarHealth.setExpireTicks(conf.getInt("expireticks"));
 		BossBarHealth.setEnabled(conf.getBoolean("enabled"));
 	}

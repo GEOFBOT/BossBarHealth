@@ -1,6 +1,7 @@
 name: BossBarHealth
 main: com.geofbot.bukkit.bossbarhealth.BossBarHealth
-version: 1.0
+version: 1.1
+depend: [BarAPI]
 commands:
    bossbar:
       description: Commands to configure BossBarHealth.
@@ -12,15 +13,12 @@ permissions:
       children:
          bossbar.use: true
          bossbar.config: true
-         bossbar.deny: false
    bossbar.use:
       description: Allows user to use BossBarHealth.
       default: true
    bossbar.config: 
       description: Allows user to enable and disable BossBarHealth.
-      default: op
+      default: op   
    bossbar.deny:
       description: Forbids user from using BossBarHealth.
       default: false
-   
-   
