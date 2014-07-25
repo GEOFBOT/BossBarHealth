@@ -60,7 +60,6 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 	}
 
 	public static void setEnabled(Boolean enabled) {
-		Bukkit.getServer().broadcastMessage("BossBarHealth is currently " + Boolean.toString(enabled));
 		BossBarHealth.enabled = enabled;
 	}
 
