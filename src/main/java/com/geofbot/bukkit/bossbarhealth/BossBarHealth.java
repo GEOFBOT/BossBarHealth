@@ -47,8 +47,11 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 	private HashMap<String, DecreaseTimer> timers = new HashMap<String, DecreaseTimer>();
 
 	private HashMap<String, String> victims = new HashMap<String, String>();
+
 	private static Integer expireTicks;
 	private static Boolean enabled;
+	private static String prefix;
+	private static String suffix;
 
 	public static Plugin plugin;
 	public static ConfigHandler config;
@@ -63,6 +66,14 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 		BossBarHealth.enabled = enabled;
 	}
 
+	public static void setPrefix(String prefix) {
+		BossBarHealth.prefix = prefix;
+	}
+
+	public static void setSuffix(String suffix) {
+		BossBarHealth.suffix = suffix;
+	}
+	
 	@Override
 	public void onEnable() {
 		plugin = this;
@@ -91,7 +102,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 						Player victim = Bukkit.getPlayer(victims.get(name));
 						if (victim == event.getEntity()) {
 							if (attacker.hasPermission("bossbar.use") && BarAPI.hasBar(attacker)) {
-								BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
+								BarAPI.setMessage(attacker, prefix + victim.getName() + suffix, (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 							}
 						}
 					}
@@ -102,7 +113,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 					victims.put(attacker.getName(), victim.getName());
 					if (attacker.hasPermission("bossbar.use"))
 					{
-						BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
+						BarAPI.setMessage(attacker, prefix + victim.getName() + suffix, (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 					}
 					timer.put(attacker.getName(), expireTicks);
 					if (!timers.containsKey(attacker.getName())) {
@@ -118,7 +129,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 					victims.put(attacker.getName(), victim.getName());
 					if (attacker.hasPermission("bossbar.use"))
 					{
-						BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
+						BarAPI.setMessage(attacker, prefix + victim.getName() + suffix, (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 					}
 					timer.put(attacker.getName(), expireTicks);
 					if (!timers.containsKey(attacker.getName())) {
@@ -144,7 +155,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 						Player victim = Bukkit.getPlayer(victims.get(name));
 						if (victim == event.getEntity()) {
 							if (attacker.hasPermission("bossbar.use") && BarAPI.hasBar(attacker)) {
-								BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() + event.getAmount()) / victim.getMaxHealth() * 100));
+								BarAPI.setMessage(attacker, prefix + victim.getName() + suffix, (float) ((victim.getHealth() + event.getAmount()) / victim.getMaxHealth() * 100));
 							}
 						}
 					}

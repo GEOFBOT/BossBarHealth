@@ -7,6 +7,8 @@ Config
 Config file is a yml with two settings:
 - `expireticks` (integer; the amount of ticks where, if PlayerA does not attack anyone, the Boss bar will disappear)
 - `enabled` (boolean (true/false); specifies whether BossBarHealth is enabled)
+- `prefix` (BossBar label prefix)
+- `suffix` (BossBar label suffix)
 
 Permissions
 -----------

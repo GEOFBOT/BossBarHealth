@@ -14,6 +14,14 @@ public class ConfigHandler {
 		}
 		BossBarHealth.setExpireTicks(conf.getInt("expireticks"));
 		BossBarHealth.setEnabled(conf.getBoolean("enabled"));
+		if(conf.getString("prefix") != null)
+			BossBarHealth.setPrefix(conf.getString("prefix"));
+		else
+			BossBarHealth.setPrefix("");
+		if(conf.getString("suffix") != null)
+			BossBarHealth.setSuffix(conf.getString("suffix"));
+		else
+			BossBarHealth.setSuffix("");
 	}
 
 	public void resetConfig() {
