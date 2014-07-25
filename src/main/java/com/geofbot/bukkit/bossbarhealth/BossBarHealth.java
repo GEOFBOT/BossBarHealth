@@ -80,6 +80,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 		getCommand("bossbar").setExecutor(new CommandManager());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		if (enabled) {
@@ -89,7 +90,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 						Player attacker = Bukkit.getPlayer(name);
 						Player victim = Bukkit.getPlayer(victims.get(name));
 						if (victim == event.getEntity()) {
-							if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")) && BarAPI.hasBar(attacker)) {
+							if (attacker.hasPermission("bossbar.use") && BarAPI.hasBar(attacker)) {
 								BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 							}
 						}
@@ -99,7 +100,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 					Player attacker = (Player) event.getDamager();
 					Player victim = (Player) event.getEntity();
 					victims.put(attacker.getName(), victim.getName());
-					if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")))
+					if (attacker.hasPermission("bossbar.use"))
 					{
 						BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 					}
@@ -115,7 +116,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 					Player attacker = (Player) ((Projectile) event.getDamager()).getShooter();
 					Player victim = (Player) event.getEntity();
 					victims.put(attacker.getName(), victim.getName());
-					if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")))
+					if (attacker.hasPermission("bossbar.use"))
 					{
 						BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 					}
@@ -132,6 +133,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onEntityRegainHealth(EntityRegainHealthEvent event) {
 		if (enabled) {
@@ -141,7 +143,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 						Player attacker = Bukkit.getPlayer(name);
 						Player victim = Bukkit.getPlayer(victims.get(name));
 						if (victim == event.getEntity()) {
-							if (BarAPI.hasBar(attacker)) {
+							if (attacker.hasPermission("bossbar.use") && BarAPI.hasBar(attacker)) {
 								BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() + event.getAmount()) / victim.getMaxHealth() * 100));
 							}
 						}

@@ -2,7 +2,6 @@ package com.geofbot.bukkit.bossbarhealth;
 
 import java.io.File;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class ConfigHandler {

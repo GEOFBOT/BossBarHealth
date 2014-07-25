@@ -11,6 +11,5 @@ Config file is a yml with two settings:
 Permissions
 -----------
 - `bossbar.*` gives access to BossBarHealth as well as its config command `bossbar`
-- `bossbar.user` allows a user to use BossBarHealth
+- `bossbar.use` allows a user to use BossBarHealth
 - `bossbar.config` allows a user to configure BossBarHealth
-- `bossbar.deny` forbids a user from using BossBarHealth

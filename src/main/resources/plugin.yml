@@ -18,7 +18,4 @@ permissions:
       default: true
    bossbar.config: 
       description: Allows user to enable and disable BossBarHealth.
-      default: op   
-   bossbar.deny:
-      description: Forbids user from using BossBarHealth.
-      default: false
+      default: op
