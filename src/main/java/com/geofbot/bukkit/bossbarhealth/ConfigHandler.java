@@ -7,6 +7,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class ConfigHandler {
 	private FileConfiguration conf = BossBarHealth.plugin.getConfig();
 	public void loadConfig() {
+		conf.addDefault("expireticks", 120);
+		conf.addDefault("enabled", true);
+		conf.addDefault("prefix", "");
+		conf.addDefault("suffix", "");
+		
 		File file = new File(BossBarHealth.plugin.getDataFolder(), "config.yml");
 		if(!file.exists()) {
 			BossBarHealth.plugin.saveDefaultConfig();
@@ -14,14 +19,8 @@ public class ConfigHandler {
 		}
 		BossBarHealth.setExpireTicks(conf.getInt("expireticks"));
 		BossBarHealth.setEnabled(conf.getBoolean("enabled"));
-		if(conf.getString("prefix") != null)
-			BossBarHealth.setPrefix(conf.getString("prefix"));
-		else
-			BossBarHealth.setPrefix("");
-		if(conf.getString("suffix") != null)
-			BossBarHealth.setSuffix(conf.getString("suffix"));
-		else
-			BossBarHealth.setSuffix("");
+		BossBarHealth.setPrefix(conf.getString("prefix"));
+		BossBarHealth.setSuffix(conf.getString("suffix"));
 	}
 
 	public void resetConfig() {

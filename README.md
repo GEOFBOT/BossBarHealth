@@ -4,11 +4,11 @@ This plugin is for PvP servers.  When PlayerA attacks PlayerB, PlayerA gets the 
 
 Config
 ------
-Config file is a yml with two settings:
+Config file is a yml with four settings:
 - `expireticks` (integer; the amount of ticks where, if PlayerA does not attack anyone, the Boss bar will disappear)
 - `enabled` (boolean (true/false); specifies whether BossBarHealth is enabled)
-- `prefix` (BossBar label prefix)
-- `suffix` (BossBar label suffix)
+- `prefix` (BossBar label prefix, used to customize BossBar label)
+- `suffix` (BossBar label suffix, used to customize BossBar label)
 
 Permissions
 -----------
