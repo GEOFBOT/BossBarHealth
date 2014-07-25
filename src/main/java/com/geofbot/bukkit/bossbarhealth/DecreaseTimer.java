@@ -38,10 +38,10 @@ import me.confuser.barapi.BarAPI;
 
 public class DecreaseTimer extends BukkitRunnable {
 	private Player attacker;
-	private HashMap<UUID,Integer> timer;
-	public DecreaseTimer(Player attacker, HashMap<UUID,Integer> timer) {
+	private HashMap<String,Integer> timer;
+	public DecreaseTimer(Player attacker, HashMap<String, Integer> timer2) {
 		this.attacker = attacker;
-		this.timer = timer;
+		this.timer = timer2;
 	}
 	public void run() {
 		if(timer.get(attacker.getUniqueId()) <= 0) {
@@ -49,7 +49,7 @@ public class DecreaseTimer extends BukkitRunnable {
 			this.cancel();
 		}
 		else {
-			timer.put(attacker.getUniqueId(), timer.get(attacker.getUniqueId()) - 1);
+			timer.put(attacker.getName(), timer.get(attacker.getName()) - 1);
 		}
 	}
 

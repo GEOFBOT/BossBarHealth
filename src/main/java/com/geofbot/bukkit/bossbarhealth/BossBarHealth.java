@@ -24,7 +24,6 @@
 package com.geofbot.bukkit.bossbarhealth;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 import me.confuser.barapi.BarAPI;
 
@@ -44,10 +43,10 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 
 public class BossBarHealth extends JavaPlugin implements Listener {
-	private HashMap<UUID, Integer> timer = new HashMap<UUID, Integer>();
-	private HashMap<UUID, DecreaseTimer> timers = new HashMap<UUID, DecreaseTimer>();
+	private HashMap<String, Integer> timer = new HashMap<String, Integer>();
+	private HashMap<String, DecreaseTimer> timers = new HashMap<String, DecreaseTimer>();
 
-	private HashMap<UUID, UUID> victims = new HashMap<UUID, UUID>();
+	private HashMap<String, String> victims = new HashMap<String, String>();
 	private static Integer expireTicks;
 	private static Boolean enabled;
 
@@ -81,15 +80,15 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 		handler.newCommand("resetconfig", new ResetCommand());
 		getCommand("bossbar").setExecutor(new CommandManager());
 	}
-
+	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		if (enabled) {
 			if (event.getEntity() instanceof Player) {
-				if (victims.containsValue(event.getEntity().getUniqueId())) {
-					for (UUID id : victims.keySet()) {
-						Player attacker = Bukkit.getPlayer(id);
-						Player victim = Bukkit.getPlayer(victims.get(id));
+				if (victims.containsValue(((Player) event.getEntity()).getName())) {
+					for (String name : victims.keySet()) {
+						Player attacker = Bukkit.getPlayer(name);
+						Player victim = Bukkit.getPlayer(victims.get(name));
 						if (victim == event.getEntity()) {
 							if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")) && BarAPI.hasBar(attacker)) {
 								BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
@@ -100,35 +99,35 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 				if (event.getEntity() instanceof Player && event.getDamager() instanceof Player) {
 					Player attacker = (Player) event.getDamager();
 					Player victim = (Player) event.getEntity();
-					victims.put(attacker.getUniqueId(), victim.getUniqueId());
+					victims.put(attacker.getName(), victim.getName());
 					if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")))
 					{
 						BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 					}
-					timer.put(attacker.getUniqueId(), expireTicks);
-					if (!timers.containsKey(attacker.getUniqueId())) {
-						timers.put(attacker.getUniqueId(), new DecreaseTimer(attacker, timer));
+					timer.put(attacker.getName(), expireTicks);
+					if (!timers.containsKey(attacker.getName())) {
+						timers.put(attacker.getName(), new DecreaseTimer(attacker, timer));
 					} else {
-						timers.get(attacker.getUniqueId()).cancel();
-						timers.put(attacker.getUniqueId(), new DecreaseTimer(attacker, timer));
+						timers.get(attacker.getName()).cancel();
+						timers.put(attacker.getName(), new DecreaseTimer(attacker, timer));
 					}
-					timers.get(attacker.getUniqueId()).runTaskTimer(this, 1L, 1L);
+					timers.get(attacker.getName()).runTaskTimer(this, 1L, 1L);
 				} else if (event.getEntity() instanceof Player && event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
 					Player attacker = (Player) ((Projectile) event.getDamager()).getShooter();
 					Player victim = (Player) event.getEntity();
-					victims.put(attacker.getUniqueId(), victim.getUniqueId());
+					victims.put(attacker.getName(), victim.getName());
 					if (attacker.hasPermission("bossbar.use") && !(attacker.hasPermission("bossbar.deny")))
 					{
 						BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
 					}
-					timer.put(attacker.getUniqueId(), expireTicks);
-					if (!timers.containsKey(attacker.getUniqueId())) {
-						timers.put(attacker.getUniqueId(), new DecreaseTimer(attacker, timer));
+					timer.put(attacker.getName(), expireTicks);
+					if (!timers.containsKey(attacker.getName())) {
+						timers.put(attacker.getName(), new DecreaseTimer(attacker, timer));
 					} else {
-						timers.get(attacker.getUniqueId()).cancel();
-						timers.put(attacker.getUniqueId(), new DecreaseTimer(attacker, timer));
+						timers.get(attacker.getName()).cancel();
+						timers.put(attacker.getName(), new DecreaseTimer(attacker, timer));
 					}
-					timers.get(attacker.getUniqueId()).runTaskTimer(this, 1L, 1L);
+					timers.get(attacker.getName()).runTaskTimer(this, 1L, 1L);
 				}
 			}
 		}
@@ -138,10 +137,10 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 	public void onEntityRegainHealth(EntityRegainHealthEvent event) {
 		if (enabled) {
 			if (event.getEntity() instanceof Player) {
-				if (victims.containsValue(event.getEntity().getUniqueId())) {
-					for (UUID id : victims.keySet()) {
-						Player attacker = Bukkit.getPlayer(id);
-						Player victim = Bukkit.getPlayer(victims.get(id));
+				if (victims.containsValue(((Player) event.getEntity()).getName())) {
+					for (String name : victims.keySet()) {
+						Player attacker = Bukkit.getPlayer(name);
+						Player victim = Bukkit.getPlayer(victims.get(name));
 						if (victim == event.getEntity()) {
 							if (BarAPI.hasBar(attacker)) {
 								BarAPI.setMessage(attacker, victim.getName(), (float) ((victim.getHealth() + event.getAmount()) / victim.getMaxHealth() * 100));
