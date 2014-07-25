@@ -42,7 +42,7 @@ public class DecreaseTimer extends BukkitRunnable {
 		this.timer = timer2;
 	}
 	public void run() {
-		if(timer.get(attacker.getUniqueId()) <= 0) {
+		if(timer.get(attacker.getName()) <= 0) {
 			BarAPI.removeBar(attacker);
 			this.cancel();
 		}
