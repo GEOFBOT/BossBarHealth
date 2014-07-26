@@ -102,7 +102,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 						Player victim = Bukkit.getPlayer(victims.get(name));
 						if (victim == event.getEntity()) {
 							if (attacker.hasPermission("bossbar.use") && BarAPI.hasBar(attacker)) {
-								BarAPI.setMessage(attacker, prefix + victim.getName() + suffix, (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
+								new SetBossBar(attacker, victim, prefix, suffix).runTaskLater(this, 0L);
 							}
 						}
 					}
@@ -113,7 +113,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 					victims.put(attacker.getName(), victim.getName());
 					if (attacker.hasPermission("bossbar.use"))
 					{
-						BarAPI.setMessage(attacker, prefix + victim.getName() + suffix, (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
+						new SetBossBar(attacker, victim, prefix, suffix).runTaskLater(this, 0L);
 					}
 					timer.put(attacker.getName(), expireTicks);
 					if (!timers.containsKey(attacker.getName())) {
@@ -129,7 +129,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 					victims.put(attacker.getName(), victim.getName());
 					if (attacker.hasPermission("bossbar.use"))
 					{
-						BarAPI.setMessage(attacker, prefix + victim.getName() + suffix, (float) ((victim.getHealth() - event.getDamage()) / victim.getMaxHealth() * 100));
+						new SetBossBar(attacker, victim, prefix, suffix).runTaskLater(this, 0L);
 					}
 					timer.put(attacker.getName(), expireTicks);
 					if (!timers.containsKey(attacker.getName())) {
@@ -155,7 +155,7 @@ public class BossBarHealth extends JavaPlugin implements Listener {
 						Player victim = Bukkit.getPlayer(victims.get(name));
 						if (victim == event.getEntity()) {
 							if (attacker.hasPermission("bossbar.use") && BarAPI.hasBar(attacker)) {
-								BarAPI.setMessage(attacker, prefix + victim.getName() + suffix, (float) ((victim.getHealth() + event.getAmount()) / victim.getMaxHealth() * 100));
+								new SetBossBar(attacker, victim, prefix, suffix).runTaskLater(this, 0L);
 							}
 						}
 					}
