@@ -5,7 +5,7 @@ depend: [BarAPI]
 commands:
    bossbar:
       description: Commands to configure BossBarHealth.
-      usage: /bossbar [help|on|off]
+      usage: /bossbar [help|on|off|resetconfig]
       permission: bossbar.config
 permissions:
    bossbar.*:
